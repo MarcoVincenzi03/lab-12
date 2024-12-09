@@ -1,46 +1,81 @@
 package it.unibo.es1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogicsImpl implements Logics {
 
+	final List<Button> buttons;
+
 	public LogicsImpl(int size) {
-		//TODO Auto-generated constructor stub
+		buttons = new ArrayList<>(size);
+		buttons.stream()
+			.forEach(b -> b = new Button());
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'size'");
+		return buttons.size();
 	}
 
 	@Override
 	public List<Integer> values() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'values'");
+		return buttons.stream()
+			.map(Button::getValue)
+			.toList();
 	}
 
 	@Override
 	public List<Boolean> enablings() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'enablings'");
+		return buttons.stream()
+			.map(Button::getState)
+			.toList();
 	}
 
 	@Override
 	public int hit(int elem) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'hit'");
+		if(buttons.get(elem).getState()){
+			buttons.get(elem).Increase();
+		}
+		return buttons.get(elem).getValue();
 	}
 
 	@Override
 	public String result() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'result'");
+		String results = "";
+
+		for (Integer value : values()) {
+			results = results + value + "|";
+		}
+
+		return results.substring(0, results.length() -2);
 	}
 
 	@Override
-	public boolean toQuit() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'toQuit'");
+	public boolean toQuit() {	
+		return values().stream()
+			.allMatch(v -> v == values().getFirst());
+	}
+
+	private final class Button{
+		private int value;
+		private boolean state;
+
+		Button(){
+			this.value = 0;
+			this.state = true;
+		}
+
+		public int getValue(){
+			return value;
+		}
+
+		public boolean getState(){
+			return state;
+		}
+
+		public void Increase(){
+			this.value++;
+		}
 	}
 }
