@@ -9,8 +9,9 @@ public class LogicsImpl implements Logics {
 
 	public LogicsImpl(int size) {
 		buttons = new ArrayList<>(size);
-		buttons.stream()
-			.forEach(b -> b = new Button());
+		for (int i = 0; i < size; i++) {
+			buttons.add(new Button());
+		}
 	}
 
 	@Override
@@ -42,19 +43,15 @@ public class LogicsImpl implements Logics {
 
 	@Override
 	public String result() {
-		String results = "";
-
-		for (Integer value : values()) {
-			results = results + value + "|";
-		}
-
-		return results.substring(0, results.length() -2);
+		return String.join("|", values().stream()
+        	.map(String::valueOf)
+        	.toList());
 	}
 
 	@Override
 	public boolean toQuit() {	
 		return values().stream()
-			.allMatch(v -> v == values().getFirst());
+			.allMatch(v -> v == values().get(0));
 	}
 
 	private final class Button{
@@ -76,6 +73,9 @@ public class LogicsImpl implements Logics {
 
 		public void Increase(){
 			this.value++;
+			if(this.value == LogicsImpl.this.size()){
+				this.state = false;
+			}
 		}
 	}
 }
